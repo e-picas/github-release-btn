@@ -1,6 +1,6 @@
 {
   "name": "github-release-button",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A dynamic and customizable \"last release\" button for any GitHub repository with version number and tarball link",
   "main": "github-release-btn.html",
   "scripts": {
