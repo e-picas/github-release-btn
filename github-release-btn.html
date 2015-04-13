@@ -47,76 +47,75 @@
     </a>
 </svg>
 <script>
-    // Read a page's GET URL variables and return them as an associative array.
-    // Source: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
-    var params = function () {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for(var i = 0; i < hashes.length; i++) {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
-        }
-        return vars;
-    }();
-
-    var defaults = {
-            type: 'default',
-            color: 'blue',
-            url: 'tarball'
-        },
-        opts    = defaults,
-        head    = document.getElementsByTagName('head')[0],
-        button  = document.getElementById('button');
-
-
-    for (var i in params) {
-        opts[i] = params[i];
+// Read a page's GET URL variables and return them as an associative array.
+// Source: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
+var params = function () {
+    var vars = [], hash, i,
+        hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
     }
-    var mask,
-        semver_strict = 'v?\\d+\.\\d+\.\\d+',
-        semver_default = semver_strict + '(-[0-9A-Za-z-\.]+)*';
-    switch (opts.type) {
-        case 'default':
-            mask = semver_default;
-            break;
-        case 'strict':
-            mask = semver_strict;
-            break;
-        default:
-            mask = semver_strict + '-' + opts.type;
+    return vars;
+}();
+
+// variables
+var opts = {
+        type:   'default',
+        color:  'blue',
+        url:    'tarball'
+    },
+    colors = {
+        blue:  '4183c4',
+        green: '4c1',
+        red:   'd9534f'
+    },
+    requests = 0,
+    mask,
+    semver_strict = 'v?\\d+\.\\d+\.\\d+',
+    semver_default = semver_strict + '(-[0-9A-Za-z-\.]+)*';
+
+// extend defaults with params
+for (var i in params) {
+    opts[i] = params[i];
+}
+
+// version to match
+switch (opts.type) {
+    case 'default':
+        mask = semver_default;
+        break;
+    case 'strict':
+        mask = semver_strict;
+        break;
+    default:
+        mask = semver_strict + '-' + opts.type;
+}
+
+// make the request
+function load(user, repo) {
+    if (requests > 2) {
+        return null;
     }
-    var reg = new RegExp('^' + mask + '$', 'i');
+    var url = 'https://api.github.com/repos/' + user + '/' + repo + '/' + (requests===1 ? 'releases' : 'tags');
+    jsonp(url);
+}
 
-    var colors = {
-            blue:  '4183c4',
-            green: '4c1',
-            red:   'd9534f'
-        };
+// request with callback
+function jsonp(path, cbName) {
+    var el      = document.createElement('script'),
+        head    = document.getElementsByTagName('head')[0];
+    el.src = path + '?callback='+ (cbName ? cbName : 'callback');
+    head.insertBefore(el, head.firstChild);
+    requests++;
+}
 
-    var requests = 0;
-    function load(user, repo) {
-        if (requests > 2) {
-            return null;
-        }
-        requests++;
-        var url = 'https://api.github.com/repos/' + user + '/' + repo + '/' + (requests===1 ? 'releases' : 'tags');
-        jsonp(url);
-    }
-
-    function jsonp(path, cbName) {
-        var el = document.createElement('script');
-        el.src = path + '?callback='+ (cbName ? cbName : 'callback');
-        document.documentElement.insertBefore(el, document.documentElement.firstChild);
-    }
-
-    function callback(obj) {
-        if (obj.data.length===0) {
-            load(opts.user, opts.repo);
-            return;
-        }
-        console.debug(obj);
-        var tag = null, i, name;
+// find concerned release or tag
+function matchTag(obj, mask) {
+    var tag = null, i, name,
+        reg = new RegExp('^' + mask + '$', 'i');
+    if (obj.data !== undefined && obj.data.length>0) {
         for (i=0; i<obj.data.length; i++) {
             name = obj.data[i].tag_name || obj.data[i].name;
             if (reg.test(name)) {
@@ -124,57 +123,78 @@
                 break;
             }
         }
-        if (tag) {
-            var elts = {
-                color:      document.getElementsByClassName('set-color'),
-                name:       document.getElementsByClassName('set-name'),
-                width:      document.getElementsByClassName('set-width'),
-                fullwidth:  document.getElementsByClassName('set-fullwidth'),
-                url:        document.getElementsByClassName('set-url')
-            };
-            // color
-            for (i=0; i < elts.color.length; i++) {
-                elts.color.item(i).setAttribute('fill',
-                    '#'+(colors[opts.color] !== undefined ? colors[opts.color] : opts.color));
-            }
-            // name
-            for (i=0; i < elts.name.length; i++) {
-                elts.name.item(i).innerHTML = tag.tag_name || tag.name;
-            }
-            // url
-            var link,
-                base_link = 'https://github.com/' + opts.user + '/' + opts.repo;
-            switch (opts.url) {
-                case 'repo':
-                    link = base_link;
-                    break;
-                case 'zipball':
-                    link = tag.zipball_url;
-                    break;
-                case 'html':
-                    link = tag.html_url || base_link + '/releases/tag/' + (tag.tag_name || tag.name);
-                    break;
-                default:
-                    link = tag.tarball_url;
-            }
-            for (i=0; i < elts.url.length; i++) {
-                elts.url.item(i).setAttribute('xlink:href', link);
-            }
-            // width
-            var bbox  = button.getElementById('name').getBBox();
-            var width = bbox.width + 10, fullwidth = width + 77;
-            button.setAttribute('width', fullwidth);
-            for (i=0; i < elts.width.length; i++) {
-                elts.width.item(i).setAttribute('width', width+'px');
-            }
-            for (i=0; i < elts.fullwidth.length; i++) {
-                elts.fullwidth.item(i).setAttribute('width', fullwidth+'px');
-            }
-        }
     }
-    if (opts.user!==undefined && opts.repo!==undefined) {
+    return tag;
+}
+
+// data callback
+function callback(obj) {
+    console.debug(obj);
+    var tag = matchTag(obj, mask);
+    if (tag) {
+        var tag_name    = tag.tag_name || tag.name,
+            tag_color   = (colors[opts.color] !== undefined ? colors[opts.color] : opts.color),
+            tag_link,
+            base_link   = 'https://github.com/' + opts.user + '/' + opts.repo;
+        switch (opts.url) {
+            case 'repo':
+                tag_link = base_link;
+                break;
+            case 'zipball':
+                tag_link = tag.zipball_url;
+                break;
+            case 'html':
+                tag_link = tag.html_url || base_link + '/releases/tag/' + (tag.tag_name || tag.name);
+                break;
+            default:
+                tag_link = tag.tarball_url;
+        }
+        populate(tag_name, tag_link, tag_color);
+    } else {
         load(opts.user, opts.repo);
     }
+}
+
+// populate svg
+function populate(name, url, color) {
+    var elts = {
+        button:     document.getElementById('button'),
+        name_box:   document.getElementById('name'),
+        color:      document.getElementsByClassName('set-color'),
+        name:       document.getElementsByClassName('set-name'),
+        width:      document.getElementsByClassName('set-width'),
+        fullwidth:  document.getElementsByClassName('set-fullwidth'),
+        url:        document.getElementsByClassName('set-url')
+    };
+    // color
+    for (i=0; i < elts.color.length; i++) {
+        elts.color.item(i).setAttribute('fill', '#'+color);
+    }
+    // name
+    for (i=0; i < elts.name.length; i++) {
+        elts.name.item(i).innerHTML = name;
+    }
+    // url
+    for (i=0; i < elts.url.length; i++) {
+        elts.url.item(i).setAttribute('xlink:href', url);
+    }
+    // width
+    var bbox        = elts.name_box.getBBox(),
+        width       = bbox.width + 10,
+        fullwidth   = width + 77;
+    elts.button.setAttribute('width', fullwidth+'px');
+    for (i=0; i < elts.width.length; i++) {
+        elts.width.item(i).setAttribute('width', width+'px');
+    }
+    for (i=0; i < elts.fullwidth.length; i++) {
+        elts.fullwidth.item(i).setAttribute('width', fullwidth+'px');
+    }
+}
+
+// load the api request if so
+if (opts.user!==undefined && opts.repo!==undefined) {
+    load(opts.user, opts.repo);
+}
 </script>
 </body>
 </html>
