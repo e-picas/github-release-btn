@@ -1,0 +1,28 @@
+{
+  "name": "github-release-button",
+  "version": "0.0.0",
+  "description": "A dynamic and customizable \"last release\" button for any GitHub repository with version number and tarball link",
+  "main": "github-release-btn.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/piwi/github-release-btn.git"
+  },
+  "keywords": [
+    "github",
+    "buttons",
+    "iframe",
+    "html"
+  ],
+  "author": {
+    "name": "Pierre Cassat",
+    "url": "http://e-piwi.fr/"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/piwi/github-release-btn/issues"
+  },
+  "homepage": "https://github.com/piwi/github-release-btn"
+}
