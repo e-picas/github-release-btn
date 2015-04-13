@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg version="1.1"
+     baseProfile="full"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="190px" height="20px"
+     id="button">
+    <a xlink:href="#" class="svg set-url">
+        <linearGradient id="a" x2="0" y2="100%">
+            <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
+            <stop offset="1" stop-opacity=".1" />
+        </linearGradient>
+        <rect rx="3" width="100" height="100%" fill="#555" />
+        <rect rx="3" x="77" width="113" height="100%" class="set-color set-width" />
+        <path class="set-color" d="M77 0h4v20h-4z" />
+        <rect rx="3" width="190" height="100%" fill="url(#a)" class="set-fullwidth" />
+        <g fill="#fff" text-anchor="left" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
+            <text x="4.5" y="15" fill="#010101" fill-opacity=".3">last release</text>
+            <text x="4.5" y="14">last release</text>
+            <text x="82.5" y="15" fill="#010101" fill-opacity=".3" class="set-name"></text>
+            <text x="82.5" y="14" class="set-name" id="name"></text>
+        </g>
+    </a>
+    <style>
+/* <![CDATA[ */
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        a.svg {
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+        a.svg:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left:0;
+        }
+/* ]]> */
+    </style>
+  <script type="text/javascript">
+    // <![CDATA[
+    // Read a page's GET URL variables and return them as an associative array.
+    // Source: http://jquery-howto.blogspot.com/2009/09/get-url-parameters-values-with-jquery.html
+    var params = function () {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }();
+
+    var user    = params.user,
+        repo    = params.repo,
+        type    = params.type || 'default',
+        color   = params.color || 'blue',
+        head    = document.getElementsByTagName('head')[0],
+        button  = document.getElementById('button');
+
+    var mask,
+        semver_strict = 'v?\\d+\.\\d+\.\\d+',
+        semver_default = semver_strict + '(-[0-9A-Za-z-\.]+)*';
+    switch (type) {
+        case 'default':
+            mask = semver_default;
+            break;
+        case 'strict':
+            mask = semver_strict;
+            break;
+        default:
+            mask = semver_strict + '-' + type;
+    }
+    var reg = new RegExp('^' + mask + '$', 'i');
+
+    var colors = {
+            blue:  '4183c4',
+            green: '4c1',
+            red:   'd9534f'
+        };
+
+    var requests = 0;
+    function load(user, repo) {
+        if (requests > 2) {
+            return null;
+        }
+        requests++;
+        var url = 'https://api.github.com/repos/' + user + '/' + repo + '/' + (requests===1 ? 'releases' : 'tags');
+        jsonp(url);
+    }
+
+    function jsonp(path, cbName) {
+        var ajax;
+        try {
+            ajax = new XMLHttpRequest();
+        } catch (e) {
+            try {
+                ajax = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    ajax = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {}
+            }
+        }
+        ajax.onreadystatechange  = function(){
+            if (ajax.readyState == 4 ) {
+                var jsonObj = ajax.responseText;
+                eval(jsonObj);
+            }
+        }
+        ajax.open("GET", path + '?callback=callback', true);
+        ajax.send();
+/*
+        var el = document.createElement('script');
+        el.src = path + '?callback='+ (cbName ? cbName : 'callback');
+        document.documentElement.insertBefore(el, document.documentElement.firstChild);
+*/
+    }
+
+    function callback(obj) {
+        if (obj.data.length===0) {
+            load(user, repo);
+            return;
+        }
+        var tag = null, i, name;
+        for (i=0; i<obj.data.length; i++) {
+            name = obj.data[i].tag_name || obj.data[i].name;
+            if (reg.test(name)) {
+                tag = obj.data[i];
+                break;
+            }
+        }
+        if (tag) {
+            var elts = {
+                color:      document.getElementsByClassName('set-color'),
+                name:       document.getElementsByClassName('set-name'),
+                width:      document.getElementsByClassName('set-width'),
+                fullwidth:  document.getElementsByClassName('set-fullwidth'),
+                url:        document.getElementsByClassName('set-url')
+            };
+            // color
+            for (i=0; i < elts.color.length; i++) {
+                elts.color.item(i).setAttribute('fill',
+                    '#'+(colors[color] !== undefined ? colors[color] : color));
+            }
+            // name
+            for (i=0; i < elts.name.length; i++) {
+                elts.name.item(i).innerHTML = tag.tag_name || tag.name;
+            }
+            // url
+            for (i=0; i < elts.url.length; i++) {
+                elts.url.item(i).setAttribute('href', tag.tarball_url);
+            }
+            // width
+            var bbox  = button.getElementById('name').getBBox();
+            var width = bbox.width + 10, fullwidth = width + 77;
+            button.setAttribute('width', fullwidth);
+            for (i=0; i < elts.width.length; i++) {
+                elts.width.item(i).setAttribute('width', width+'px');
+            }
+            for (i=0; i < elts.fullwidth.length; i++) {
+                elts.fullwidth.item(i).setAttribute('width', fullwidth+'px');
+            }
+        }
+    }
+    if (user!==undefined && repo!==undefined) {
+        load(user, repo);
+    }
+    console.log('loaded');
+// ]]>
+</script>
+</svg>
