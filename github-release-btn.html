@@ -142,16 +142,17 @@
                 elts.name.item(i).innerHTML = tag.tag_name || tag.name;
             }
             // url
-            var link;
+            var link,
+                base_link = 'https://github.com/' + opts.user + '/' + opts.repo;
             switch (opts.url) {
                 case 'repo':
-                    link = 'https://github.com/' + opts.user + '/' + opts.repo;
+                    link = base_link;
                     break;
                 case 'zipball':
                     link = tag.zipball_url;
                     break;
                 case 'html':
-                    link = tag.html_url;
+                    link = tag.html_url || base_link + '/releases/tag/' + (tag.tag_name || tag.name);
                     break;
                 default:
                     link = tag.tarball_url;

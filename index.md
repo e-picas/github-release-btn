@@ -2,8 +2,8 @@
 layout: default
 ---
 
-<iframe id="github-release-frame" src="github-release-btn.html?user=piwi&repo=markdown-extended"
-        frameborder="0" scrolling="0" width="190px" height="20px"></iframe>
+<iframe id="github-release-frame" src="github-release-btn.html?user=piwi&repo=github-release-btn"
+        frameborder="0" scrolling="0" width="100%" height="20px"></iframe>
 
 ----
 
@@ -17,18 +17,19 @@ layout: default
 Tests
 -----
 
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended')">markdown-extended</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended&color=green')">markdown-extended with green color</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended&color=red')">markdown-extended with red color</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended&color=ccc')">markdown-extended with custom color</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended&url=zipball')">markdown-extended with zipball link</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended&url=html')">markdown-extended with HTML link</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=markdown-extended&url=repo')">markdown-extended with repository link</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=nunjucks-date-filter')">nunjucks-date-filter</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=html5-quick-template')">html5-quick-template</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=html5-quick-template&type=strict')">html5-quick-template with strict match</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=html5-quick-template&type=mde')">html5-quick-template with "mde" match</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">dotfiles</a> (no realase or tag)
+Most of the tests below work on the [original *github-release-btn* repository](https://github.com/piwi/github-release-btn):
+
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn')">default test</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=zipball')">test with zipball link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=html')">test with HTML link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=repo')">test with repository link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.status.suffix.for.test.0123456789')">test with 'type=with.a.very.long.status.suffix.for.test.0123456789'</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a>
 
 ----
 
@@ -36,7 +37,7 @@ Usage
 -----
 
 {% highlight html %}
-<iframe src="github-release-btn.html?user=piwi&repo=github-release-btn" frameborder="0" scrolling="0" width="190px" height="20px"></iframe>
+<iframe src="http://piwi.github.io/github-release-btn/github-release-btn.html?user=piwi&repo=github-release-btn" frameborder="0" scrolling="0" width="190px" height="20px"></iframe>
 {% endhighlight %}
 
 ----
