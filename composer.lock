@@ -1,0 +1,146 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "da6d7bfd87de975d6253db9b8c1c92ef",
+    "packages": [
+        {
+            "name": "piwi/markdown-extended",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/piwi/markdown-extended.git",
+                "reference": "ca2ff42e2c991181c224426d4ea7f31db3cc449c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/piwi/markdown-extended/zipball/ca2ff42e2c991181c224426d4ea7f31db3cc449c",
+                "reference": "ca2ff42e2c991181c224426d4ea7f31db3cc449c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "replace": {
+                "atelierspierrot/extended-markdown": "dev-master",
+                "atelierspierrot/markdown-extended": "dev-master"
+            },
+            "require-dev": {
+                "codeclimate/php-test-reporter": "dev-master",
+                "fabpot/php-cs-fixer": "@stable",
+                "phpmd/phpmd": "@stable",
+                "phpunit/phpunit": "@stable",
+                "sami/sami": "2.*"
+            },
+            "bin": [
+                "bin/markdown-extended",
+                "man/markdown-extended.3.man",
+                "man/markdown-extended.7.man"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.0.*-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "MarkdownExtended": "src"
+                },
+                "files": [
+                    "src/markdown.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "John Gruber",
+                    "homepage": "http://daringfireball.net/"
+                },
+                {
+                    "name": "Fletcher T. Penney",
+                    "homepage": "http://fletcherpenney.net/"
+                },
+                {
+                    "name": "Michel Fortin",
+                    "homepage": "http://michelf.com/"
+                },
+                {
+                    "name": "Pierre Cassat",
+                    "homepage": "http://e-piwi.fr/"
+                }
+            ],
+            "description": "Yet another PHP parser for the markdown (*extended*) syntax",
+            "homepage": "http://github.com/piwi/markdown-extended",
+            "keywords": [
+                "markdown",
+                "markdown extended",
+                "mde"
+            ],
+            "time": "2015-04-11 07:55:43"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "heroku/heroku-buildpack-php",
+            "version": "v67",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/heroku/heroku-buildpack-php.git",
+                "reference": "8da6b92aad89b2e7254f5eb2ad39ffac315b2282"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/heroku/heroku-buildpack-php/zipball/8da6b92aad89b2e7254f5eb2ad39ffac315b2282",
+                "reference": "8da6b92aad89b2e7254f5eb2ad39ffac315b2282",
+                "shasum": ""
+            },
+            "bin": [
+                "bin/heroku-hhvm-apache2",
+                "bin/heroku-hhvm-nginx",
+                "bin/heroku-php-apache2",
+                "bin/heroku-php-nginx"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Zuelke",
+                    "email": "dz@heroku.com"
+                }
+            ],
+            "description": "Toolkit for starting a PHP application locally, with or without foreman, using the same config for PHP/HHVM and Apache2/Nginx as on Heroku",
+            "homepage": "http://github.com/heroku/heroku-buildpack-php",
+            "keywords": [
+                "apache",
+                "apache2",
+                "foreman",
+                "heroku",
+                "hhvm",
+                "nginx",
+                "php"
+            ],
+            "time": "2015-03-24 19:49:58"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "piwi/markdown-extended": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "5.4.*",
+        "ext-gd": "*"
+    },
+    "platform-dev": []
+}
