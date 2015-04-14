@@ -1,0 +1,12 @@
+{
+  "name": "piwi/github-release-btn",
+  "description": "A dynamic and customizable \"last release\" button for any GitHub repository with version number and tarball link",
+  "license": "Apache-2.0",
+  "authors": [{
+      "name": "piwi",
+      "email": "me@e-piwi.fr"
+  }],
+  "require": {
+    "php": "~5.4.0"
+  }
+}
