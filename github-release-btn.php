@@ -70,6 +70,8 @@ function githubApiReq($url)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
     curl_setopt($ch, CURLOPT_USERAGENT, 'GitHubReleaseButtonApp');
+    curl_setopt($ch, CURLOPT_USERPWD, 'ec8e5cae540203319afb79fc418a6f96213b0d69:x-oauth-basic');
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     $content = curl_exec($ch);
     curl_close($ch);
     return json_decode($content, true);
@@ -79,7 +81,7 @@ function matchTag($data)
 {
     $mask = _settings('mask');
     foreach ($data as $i=>$item) {
-        $name = isset($item['tag_name']) ? $item['tag_name'] : $item['name'];
+        $name = isset($item['tag_name']) ? $item['tag_name'] : isset($item['name']) ? $item['name'] : '';
         if (0 !== preg_match('#^'.$mask.'$#i', $name)) {
             return $item;
         }
@@ -92,6 +94,7 @@ function parseTag()
     $tag = _settings('tag');
     $data = array();
     $data['name']   = isset($tag['tag_name']) ? $tag['tag_name'] : $tag['name'];
+    $data['title']  = _settings('title');
     $data['color']  = _settings('color');
     $data['base_link']  = 'https://github.com/' . _settings('user').'/'._settings('repo');
     $url = _settings('url');
@@ -111,9 +114,30 @@ function parseTag()
     _settings('tag_data', $data);
 }
 
+function guessTextWidth($str)
+{
+    $box = imageTTFBbox(11,0,__DIR__.DIRECTORY_SEPARATOR.'fonts'.DIRECTORY_SEPARATOR.'DejaVuSans.ttf',$str);
+    return abs($box[4] - $box[0]) * (72/96);
+}
+
 function render()
 {
-    $data = _settings('tag_data');
+    $data       = _settings('tag_data');
+    $padding    = 6;
+    $separator  = 4;
+    $sizes      = array();
+    // left part
+    $sizes['left-width'] = (2*$padding) + guessTextWidth($data['title']) + ($separator/2);
+    $sizes['left-padding'] = $padding;
+    // right part
+    $sizes['right-width'] = (2*$padding) + guessTextWidth($data['name']);
+    $sizes['right-padding'] = $sizes['left-width'] + $separator;
+    // separator
+    $sizes['separator-x'] = $sizes['left-width'];
+    // full
+    $sizes['full-width'] = $sizes['left-width'] + $sizes['right-width'];
+    // content
+    dbg('Sizes are:', $sizes);
     $svg = <<<MSG
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
@@ -121,7 +145,7 @@ function render()
      baseProfile="full"
      xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="190px" height="20px"
+     width="{$sizes['full-width']}px" height="20px"
      id="button">
 <style>
 /* <![CDATA[ */
@@ -145,15 +169,15 @@ a.svg:after {
             <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
             <stop offset="1" stop-opacity=".1" />
         </linearGradient>
-        <rect rx="3" width="100" height="100%" fill="#555" />
-        <rect rx="3" x="77" width="113" height="100%" fill="#{$data['color']}" class="set-width" />
-        <path fill="#{$data['color']}" d="M77 0h4v20h-4z" />
-        <rect rx="3" width="190" height="100%" fill="url(#a)" class="set-fullwidth" />
+        <rect rx="3" width="90%" height="100%" fill="#555" />
+        <rect rx="3" x="{$sizes['left-width']}" width="{$sizes['right-width']}" height="100%" fill="#{$data['color']}" />
+        <path fill="#{$data['color']}" d="M{$sizes['separator-x']} 0h4v20h-4z" />
+        <rect rx="3" width="{$sizes['full-width']}" height="100%" fill="url(#a)" />
         <g fill="#fff" text-anchor="start" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-            <text x="7" y="15" fill="#010101" fill-opacity=".3">last release</text>
-            <text x="7" y="14">last release</text>
-            <text x="82.5" y="15" fill="#010101" fill-opacity=".3">{$data['name']}</text>
-            <text x="82.5" y="14">{$data['name']}</text>
+            <text x="{$sizes['left-padding']}" y="15" fill="#010101" fill-opacity=".3">{$data['title']}</text>
+            <text x="{$sizes['left-padding']}" y="14">{$data['title']}</text>
+            <text x="{$sizes['right-padding']}" y="15" fill="#010101" fill-opacity=".3">{$data['name']}</text>
+            <text x="{$sizes['right-padding']}" y="14">{$data['name']}</text>
         </g>
     </a>
 </svg>
@@ -189,6 +213,7 @@ if (defined('HARD_DEBUG') && HARD_DEBUG===true) {
 
 // defaults
 _settings(array(
+    'title' => 'last release',
     'type'  => 'default',
     'color' => 'blue',
     'url'   => 'tarball',

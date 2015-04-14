@@ -25,15 +25,19 @@
     <iframe id="github-release-frame" src="github-release-btn?user=piwi&repo=github-release-btn"
         frameborder="0" scrolling="0" width="100%" height="20px"></iframe><hr /><h2 id="tests">Tests</h2>
 <p>Most of the tests below work on the <a href="https://github.com/piwi/github-release-btn" title="See online https://github.com/piwi/github-release-btn">original <em>github-release-btn</em> repository</a>:</p>
-<ul><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn')">default test</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=zipball')">test with zipball link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=html')">test with HTML link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=repo')">test with repository link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.status.suffix.for.test.0123456789')">test with 'type=with.a.very.long.status.suffix.for.test.0123456789'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a></li></ul><hr /><h2 id="usage">Usage</h2>
+<ul><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn')">default test</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=zipball')">test with zipball link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red&title=my+custom+title')">test with red color with a custom title</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=html')">test with HTML link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=repo')">test with repository link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.status.suffix.for.test.0123456789')">test with 'type=with.a.very.long.status.suffix.for.test.0123456789'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a></li></ul><hr /><h2 id="usage">Usage</h2>
 <p>You embed use the button in an <code>iframe</code>, which will keep the link on the button to the tarball or original repository:</p>
 
-<pre class="language-html">&lt;iframe src="https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&amp;repo=github-release-btn" frameborder="0" scrolling="0" width="190px" height="20px"&gt;&lt;/iframe&gt;
+<pre class="language-html">&lt;iframe src="https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&amp;repo=github-release-btn" 
+    frameborder="0" scrolling="0" 
+    width="190px" height="20px"&gt;
+    &lt;/iframe&gt;
 </pre>
 
 <p>You can also embed the button as a simple image, to let you choose to surround it in a custom link:</p>
 
-<pre class="language-html">&lt;img src="https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&amp;repo=github-release-btn" alt="last release" /&gt;
+<pre class="language-html">&lt;img src="https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&amp;repo=github-release-btn" 
+    alt="last release" /&gt;
 </pre>
 
 <p>NOTE - The image notation allows to be used in <a href="http://daringfireball.net/projects/markdown/syntax" title="See online http://daringfireball.net/projects/markdown/syntax">a markdown</a> content easily:</p>
@@ -66,11 +70,10 @@ downloading, forking and contributing.</p>
     </div>
 </footer>
 <script>
-    function loadFrame(url) {
-        document.getElementById('github-release-frame').setAttribute('src', 'github-release-btn?' + url);
-        document.getElementById('github-release-frame-img').setAttribute('src', 'github-release-btn?' + url);
-        return false;
-    }
+function loadFrame(url) {
+    document.getElementById('github-release-frame').setAttribute('src', 'github-release-btn?' + url);
+    return false;
+}
 </script>
 </body>
 </html>

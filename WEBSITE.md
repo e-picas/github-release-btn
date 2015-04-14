@@ -18,6 +18,7 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=zipball')">test with zipball link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red&title=my+custom+title')">test with red color with a custom title</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=html')">test with HTML link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=repo')">test with repository link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a>
