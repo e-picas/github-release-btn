@@ -2,7 +2,7 @@
   "name": "github-release-button",
   "version": "0.1.0",
   "description": "A dynamic and customizable \"last release\" button for any GitHub repository with version number and tarball link",
-  "main": "github-release-btn.html",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/piwi/github-release-btn/issues"
   },
-  "homepage": "https://github.com/piwi/github-release-btn"
+  "homepage": "https://github.com/piwi/github-release-btn",
+  "dependencies": {
+    "express": "^4.12.3",
+    "nunjucks": "^1.3.3",
+    "request": "^2.55.0"
+  }
 }
