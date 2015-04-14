@@ -45,13 +45,16 @@ Usage
 Available options
 -----------------
 
+You can (or may) use the following options as URL parameters to customize
+your rendering:
+
 -   `user` (**required**): the GitHub user name
 -   `repo` (**required**): the GitHub repository name
 -   `type` (*optional, defaults to "`default`"*): the release type to match
     -   `type=default`: will match last version number like `(v)X.Y.Z-STATE`
     -   `type=strict`: will match last version number like `(v)X.Y.Z`
     -   `type=STRING`: will match last version number like `(v)X.Y.Z-STRING`
--   `color` (*optional, defaults to "`red`"*): the button color
+-   `color` (*optional, defaults to "`blue`"*): the button color
     -   `color=blue`: blue button <span class="showcase-color blue"></span>
     -   `color=green`: green button <span class="showcase-color green"></span>
     -   `color=red`: red button <span class="showcase-color red"></span>
