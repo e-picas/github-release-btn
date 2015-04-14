@@ -23,7 +23,7 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=repo')">test with repository link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.status.suffix.for.test.0123456789')">test with 'type=with.a.very.long.status.suffix.for.test.0123456789'</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.*')">test with 'type=with.a.very.long.*'</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a>
 
 ----
