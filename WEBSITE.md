@@ -17,10 +17,10 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=zipball')">test with zipball link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red&title=my+custom+title')">test with red color with a custom title</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=html')">test with HTML link</a>
--   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&url=repo')">test with repository link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=zipball')">test with zipball link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=html')">test with HTML link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=repo')">test with repository link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.status.suffix.for.test.0123456789')">test with 'type=with.a.very.long.status.suffix.for.test.0123456789'</a>
@@ -31,10 +31,13 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 Usage
 -----
 
-You embed use the button in an `iframe`, which will keep the link on the button to the tarball or original repository:
+The base URL of the button is `https://ghrb.herokuapp.com/github-release-btn`
+(a PHP app freely hosted by [Heroku](http://heroku.com/)).
+
+You can use the button in an `iframe`, which will keep the link on the button to the tarball or original repository:
 
 ```html
-<iframe src="https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn" 
+<iframe src="https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn" 
     frameborder="0" scrolling="0" 
     width="190px" height="20px">
     </iframe>
@@ -43,13 +46,13 @@ You embed use the button in an `iframe`, which will keep the link on the button 
 You can also embed the button as a simple image, to let you choose to surround it in a custom link:
 
 ```html
-<img src="https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn" 
+<img src="https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn" 
     alt="last release" />
 ```
 
 NOTE - The image notation allows to be used in [a markdown](http://daringfireball.net/projects/markdown/syntax) content easily:
 
-    ![alt](https://github-release-btn-php.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn)
+    ![alt](https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn)
 
 ----
 
@@ -70,11 +73,12 @@ your rendering:
     -   `color=green`: green button <span class="showcase-color green"></span>
     -   `color=red`: red button <span class="showcase-color red"></span>
     -   `color=XXXXXX`: custom colored button
--   `url` (*optional, defaults to "`tarball`"*): the button link URL
-    -   `url=tarball`: direct link to download a *tar.gz* archive of the release
-    -   `url=zipball`: direct link to download a *zip* archive of the release
-    -   `url=html`: link to the release's page on GitHub
-    -   `url=repo`: link to the repository's homepage on GitHub
+-   `link` (*optional, defaults to "`tarball`"*): the button link URL
+    -   `link=tarball`: direct link to download a *tar.gz* archive of the release
+    -   `link=zipball`: direct link to download a *zip* archive of the release
+    -   `link=html`: link to the release's page on GitHub
+    -   `link=repo`: link to the repository's homepage on GitHub
+-   `title` (*optional, defaults to `last release`*): the title of the button
 
 ----
 

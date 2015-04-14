@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the GitHub-Release-Button app
+ *
+ * (c) Pierre Cassat <me@e-piwi.fr> and contributors
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 // hard debug
 //define('HARD_DEBUG', true);
@@ -7,10 +15,21 @@
 @error_reporting(-1);
 @ini_set('display_errors', 1);
 
+// set a default timezone to avoid PHP5 warnings
+$dtmz = @date_default_timezone_get();
+@date_default_timezone_set($dtmz?:'Europe/Paris');
+
 // -----------------
 // library
 // -----------------
 
+/**
+ * App settings setter/getter
+ *
+ * @param null $name
+ * @param null $value
+ * @return array|null
+ */
 function _settings($name = null, $value = null)
 {
     static $settings = array();
@@ -24,17 +43,27 @@ function _settings($name = null, $value = null)
     return $settings;
 }
 
+/**
+ * Parse current request sanitized parameters
+ *
+ * @return array
+ */
 function getParams()
 {
     $params = array();
     if (isset($_GET) && !empty($_GET)) {
         foreach ($_GET as $var=>$val) {
-            $params[$var] = urldecode($val);
+            $params[$var] = filter_input(INPUT_GET, $var, FILTER_SANITIZE_STRING);
         }
     }
     return $params;
 }
 
+/**
+ * Builds the mask to match release tag name
+ *
+ * @return string
+ */
 function guessMask()
 {
     $semver_strict = 'v?\\d+\.\\d+\.\\d+';
@@ -52,6 +81,11 @@ function guessMask()
     }
 }
 
+/**
+ * Treats the `color` argument
+ *
+ * @return array|null
+ */
 function guessColor()
 {
     $colors = array(
@@ -63,6 +97,12 @@ function guessColor()
     return isset($colors[$col]) ? $colors[$col] : $col;
 }
 
+/**
+ * Process a cURL request to the GitHub API
+ *
+ * @param string $url   The type of request in 'tags', 'releases'
+ * @return mixed
+ */
 function githubApiReq($url) 
 {
     $ch = curl_init();
@@ -77,18 +117,29 @@ function githubApiReq($url)
     return json_decode($content, true);
 }
 
+/**
+ * Find concerned tag in an API response with mask builds by `guessMask()`
+ *
+ * @param array $data
+ * @return null
+ */
 function matchTag($data)
 {
-    $mask = _settings('mask');
-    foreach ($data as $i=>$item) {
-        $name = isset($item['tag_name']) ? $item['tag_name'] : isset($item['name']) ? $item['name'] : '';
-        if (0 !== preg_match('#^'.$mask.'$#i', $name)) {
-            return $item;
+    if (is_array($data)) {
+        $mask = _settings('mask');
+        foreach ($data as $i=>$item) {
+            $name = isset($item['tag_name']) ? $item['tag_name'] : isset($item['name']) ? $item['name'] : '';
+            if (0 !== preg_match('#^'.$mask.'$#i', $name)) {
+                return $item;
+            }
         }
     }
     return null;
 }
 
+/**
+ * Parses found tag to extract relative info
+ */
 function parseTag()
 {
     $tag = _settings('tag');
@@ -97,8 +148,8 @@ function parseTag()
     $data['title']  = _settings('title');
     $data['color']  = _settings('color');
     $data['base_link']  = 'https://github.com/' . _settings('user').'/'._settings('repo');
-    $url = _settings('url');
-    switch ($url) {
+    $link = _settings('link');
+    switch ($link) {
         case 'repo':
             $data['tag_link'] = $data['base_link'];
             break;
@@ -114,12 +165,21 @@ function parseTag()
     _settings('tag_data', $data);
 }
 
+/**
+ * Calculates a text box width with DejaVu font in 11 points' size
+ *
+ * @param string $str
+ * @return number
+ */
 function guessTextWidth($str)
 {
     $box = imageTTFBbox(11,0,__DIR__.DIRECTORY_SEPARATOR.'fonts'.DIRECTORY_SEPARATOR.'DejaVuSans.ttf',$str);
     return abs($box[4] - $box[0]) * (72/96);
 }
 
+/**
+ * Render the SVG content
+ */
 function render()
 {
     $data       = _settings('tag_data');
@@ -186,8 +246,25 @@ MSG;
         header('Content-Type: image/svg+xml');
     }
     echo $svg;
+    exit(0);
 }
 
+/**
+ * Render an empty button
+ */
+function renderEmpty()
+{
+    _settings('tag_data', array(
+        'name'      => '                ',
+        'title'     => _settings('title'),
+        'color'     => '404040',
+        'base_link' => '#',
+        'tag_link'  => '#',
+    ));
+    render();
+}
+
+// debug
 function dbg()
 {
     if (defined('HARD_DEBUG') && HARD_DEBUG===true) {
@@ -216,7 +293,7 @@ _settings(array(
     'title' => 'last release',
     'type'  => 'default',
     'color' => 'blue',
-    'url'   => 'tarball',
+    'link'  => 'tarball',
 ));
 
 // URL request
@@ -228,7 +305,10 @@ _settings('mask', guessMask());
 // button color
 _settings('color', guessColor());
 
+// debug full settings
 dbg('Settings are:', _settings());
+
+//
 
 // ok to go?
 if (_settings('user') && _settings('repo')) {
@@ -237,13 +317,10 @@ if (_settings('user') && _settings('repo')) {
         $json = githubApiReq('tags');
     }
     dbg('JSON response is:', $json);
-
     if (!empty($json)) {
-
         // concerned tag
         $tag = matchTag($json);
         dbg('Found tag is:', $tag);
-        
         if (!empty($tag)) {
             _settings('tag', $tag);
             parseTag();
@@ -251,3 +328,6 @@ if (_settings('user') && _settings('repo')) {
         }
     }
 }
+
+// else empty button
+renderEmpty();
