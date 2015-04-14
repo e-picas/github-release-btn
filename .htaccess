@@ -3,7 +3,11 @@ DirectoryIndex index.html
 ServerSignature Off
 RewriteEngine On
 RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+)$ $1.php [QSA,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^github-release-btn$ github-release-btn.php [QSA,L]
-RewriteRule ^(.*)$ github-release-btn.php?$1 [QSA,L]
+RewriteRule ^(.*)$ index.html?$1 [QSA,L]
