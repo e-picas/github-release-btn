@@ -8,11 +8,12 @@
   }],
   "require": {
     "php": "5.4.*",
-    "piwi/markdown-extended": "dev-master",
-    "ext-gd": "*"
+    "piwi/markdown-extended": "dev-master"
   },
   "require-dev": {
-    "heroku/heroku-buildpack-php": "*"
+    "php": "5.5.*",
+    "heroku/heroku-buildpack-php": "*",
+    "ext-gd": "*"
   },
   "scripts": {
     "website": [
