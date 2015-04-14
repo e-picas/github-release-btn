@@ -7,6 +7,6 @@ specifications.
 
 To begin, have a look at <https://github-release-btn-php.herokuapp.com/>.
 
-[![last release](hhttps://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn)](https://github.com/piwi/github-release-btn/releases)
+[![last release](https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn)](https://github.com/piwi/github-release-btn/releases)
 
 Made by [@piwi](https://github.com/piwi/) with love ; licensed under [Apache 2](http://www.apache.org/licenses/LICENSE-2.0).
