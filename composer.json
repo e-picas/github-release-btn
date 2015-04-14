@@ -7,9 +7,13 @@
       "email": "me@e-piwi.fr"
   }],
   "require": {
-    "php": "5.5.*"
+    "php": "5.5.*",
+    "piwi/markdown-extended": "dev-master"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
+  },
+  "scripts": {
+    "website": "./vendor/bin/markdown-extended -t layout.html -o index.html WEBSITE.md"
   }
 }
