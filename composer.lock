@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "da6d7bfd87de975d6253db9b8c1c92ef",
+    "hash": "009b1d9aa9cdb16733cf79a549fb152d",
     "packages": [
         {
             "name": "piwi/markdown-extended",
@@ -139,7 +139,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "5.4.*",
+        "php": "5.5.*",
         "ext-gd": "*"
     },
     "platform-dev": []
