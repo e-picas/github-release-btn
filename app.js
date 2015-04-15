@@ -6,6 +6,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+var path        = require('path');
 var express     = require('express');
 var githubrb    = require('./github-release-btn');
 var nunjucks    = require('nunjucks');
@@ -17,16 +19,20 @@ nunjucks.configure(__dirname, {
     express: app
 });
 
-app.set('port', (process.env.PORT || 5000));
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'web')));
 
-app.get('/github-release-btn', function(req, resp) {
-    githubrb.parse(req, resp, function(resp, data) {
-        console.dir(githubrb.data);
-        resp.render('./github-release-btn.svg.j2', data);
+app.get('/github-release-btn', function(req, res) {
+    githubrb.parse(req, res, function(res, data) {
+//        console.dir(githubrb.data);
+        res.set('Content-Type', 'image/svg+xml');
+        res.render('github-release-btn.svg.j2', data);
+        res.end();
     });
 });
 
+app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'), function() {
-   console.log("Node app is running at localhost :" + app.get('port'));
+   console.log("Node app is running at localhost:" + app.get('port'));
 });
+
+module.exports = app;

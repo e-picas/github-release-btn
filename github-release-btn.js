@@ -11,7 +11,7 @@
 
 var request = require('request');
 
-//var HARD_DEBUG = true;
+var HARD_DEBUG = true;
 
 // debug with a title
 function log(title, obj) {
@@ -121,6 +121,14 @@ module.exports = {
             this.repo_link  = 'https://github.com/' + this.opts.user + '/' + this.opts.repo;
             this.api_link   = 'https://api.github.com/repos/' + this.opts.user + '/' + this.opts.repo;
             this.load('releases');
+        } else {
+            this.data = {
+                name:   '      ',
+                title:  this.opts.title,
+                color:  '404040',
+                link:   '#'
+            };
+            this.send();
         }
     },
 
@@ -134,6 +142,7 @@ module.exports = {
 
     // request with callback
     jsonp: function(path) {
+        log('calling', path);
         var _this = this,
             options = {
                 url: path,
@@ -141,6 +150,8 @@ module.exports = {
             };
         request(options,
             function (error, response, body) {
+//                log('response is', response);
+//                log('response is', body);
                 if (!error && response.statusCode == 200) {
                     var info = JSON.parse(body);
                     log('response is', info);
@@ -176,30 +187,39 @@ module.exports = {
                 default:
                     tag_link = tag.tarball_url;
             }
-            // sizes
-            var sizes = {};
-            // left part
-            sizes.left_width = (2*this.padding) + guessTextWidth(this.opts.title) + (this.separator/2);
-            sizes.left_padding = this.padding;
-            // right part
-            sizes.right_width = (2*this.padding) + guessTextWidth(tag_name);
-            sizes.right_padding = sizes.left_width + this.separator;
-            // separator
-            sizes.separator_x = sizes.left_width;
-            // full
-            sizes.full_width = sizes.left_width + sizes.right_width;
             // full data
-            this.data = merge(sizes, {
+            this.data = {
                 title: this.opts.title,
                 name: tag_name,
                 link: tag_link,
                 color: tag_color
-            });
-            log('data are', this.data);
-            this.cbName(this.response, this.data);
+            };
+            this.send();
         } else {
             this.load('tags');
         }
+    },
+
+    guessSizes: function() {
+        // sizes
+        var sizes = {};
+        // left part
+        sizes.left_width = (2*this.padding) + guessTextWidth(this.data.title) + (this.separator/2);
+        sizes.left_padding = this.padding;
+        // right part
+        sizes.right_width = (2*this.padding) + guessTextWidth(this.data.name);
+        sizes.right_padding = sizes.left_width + this.separator;
+        // separator
+        sizes.separator_x = sizes.left_width;
+        // full
+        sizes.full_width = sizes.left_width + sizes.right_width;
+
+        return sizes;
+    },
+
+    send: function() {
+        log('data are', this.data);
+        this.cbName(this.response, merge(this.data, this.guessSizes()));
     }
 
 };
