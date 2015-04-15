@@ -1,4 +1,3 @@
-_site/
-.sass-cache/
 dev
+vendor
 node_modules

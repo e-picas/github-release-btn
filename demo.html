@@ -22,86 +22,44 @@
         </div>
     </div>
 
-    <iframe id="github-release-frame" src="/?user=piwi&amp;repo=github-release-btn" frameborder="0" scrolling="0" width="100%" height="20px"></iframe>
+    <img id="github-release-img" src="/github-release-btn?user=piwi&repo=github-release-btn" alt="img" />
+    <hr>
+    <iframe id="github-release-frame" src="/github-release-btn?user=piwi&repo=github-release-btn"
+            frameborder="0" scrolling="0" width="100%" height="20px"></iframe>
 
-    <hr />
+    <hr /><h2 id="tests">Tests</h2>
+    <p>Most of the tests below work on the <a href="https://github.com/piwi/github-release-btn" title="See online https://github.com/piwi/github-release-btn">original <em>github-release-btn</em> repository</a>:</p>
+    <ul><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn')">default test</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red&title=my+custom+title')">test with red color with a custom title</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=zipball')">test with zipball link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=html')">test with HTML link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=repo')">test with repository link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.*')">test with 'type=with.a.very.long.*'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a></li></ul><hr /><h2 id="usage">Usage</h2>
+    <p>The base URL of the button is <code>https://ghrb.herokuapp.com/github-release-btn</code>
+        (a PHP app freely hosted by <a href="http://heroku.com/" title="See online http://heroku.com/">Heroku</a>).</p>
 
-    <h3>Contents</h3>
+    <p>You can use the button in an <code>iframe</code>, which will keep the link on the button to the tarball or original repository:</p>
 
-    <ul id="markdown-toc">
-        <li><a href="#tests">Tests</a></li>
-        <li><a href="#usage">Usage</a></li>
-        <li><a href="#available-options">Available options</a></li>
-        <li><a href="#open-source">Open source</a></li>
-    </ul>
+<pre class="language-html">&lt;iframe src="https://ghrb.herokuapp.com/?user=piwi&amp;repo=github-release-btn" 
+    frameborder="0" scrolling="0" 
+    width="190px" height="20px"&gt;
+    &lt;/iframe&gt;
+</pre>
 
-    <p><img src="/?user=piwi&amp;repo=github-release-btn" alt="last release" /></p>
+    <p>You can also embed the button as a simple image, to let you choose to surround it in a custom link:</p>
 
-    <hr />
+<pre class="language-html">&lt;img src="https://ghrb.herokuapp.com/?user=piwi&amp;repo=github-release-btn" 
+    alt="last release" /&gt;
+</pre>
 
-    <h2 id="tests">Tests</h2>
+    <p>NOTE - The image notation allows to be used in <a href="http://daringfireball.net/projects/markdown/syntax" title="See online http://daringfireball.net/projects/markdown/syntax">a markdown</a> content easily:</p>
 
-    <p>Most of the tests below work on the <a href="https://github.com/piwi/github-release-btn">original <em>github-release-btn</em> repository</a>:</p>
-
-    <ul>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn')">default test</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;color=green')">test with green color</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;color=red')">test with red color</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;color=ccc')">test with custom color</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;url=zipball')">test with zipball link</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;url=html')">test with HTML link</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;url=repo')">test with repository link</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;type=strict')">test with ‘strict’ mode</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;type=no.v.prefix')">test with ‘type=no.v.prefix’</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=github-release-btn&amp;type=with.a.very.long.status.suffix.for.test.0123456789')">test with ‘type=with.a.very.long.status.suffix.for.test.0123456789’</a></li>
-        <li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&amp;repo=dotfiles')">test on a repository with no realease or tag</a></li>
-    </ul>
-
-    <hr />
-
-    <h2 id="usage">Usage</h2>
-
-    <div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;iframe</span> <span class="na">src=</span><span class="s">&quot;http://piwi.github.io/github-release-btn/github-release-btn.html?user=piwi&amp;repo=github-release-btn&quot;</span> <span class="na">frameborder=</span><span class="s">&quot;0&quot;</span> <span class="na">scrolling=</span><span class="s">&quot;0&quot;</span> <span class="na">width=</span><span class="s">&quot;190px&quot;</span> <span class="na">height=</span><span class="s">&quot;20px&quot;</span><span class="nt">&gt;&lt;/iframe&gt;</span></code></pre></div>
-
-    <hr />
-
-    <h2 id="available-options">Available options</h2>
-
+    <pre>![alt](https://ghrb.herokuapp.com/?user=piwi&amp;repo=github-release-btn)</pre>
+    <hr /><h2 id="available-options">Available options</h2>
     <p>You can (or may) use the following options as URL parameters to customize
         your rendering:</p>
+    <ul><li><code>user</code> (<strong>required</strong>): the GitHub user name</li><li><code>repo</code> (<strong>required</strong>): the GitHub repository name</li><li><code>type</code> (<em>optional, defaults to "<code>default</code>"</em>): the release type to match
 
-    <ul>
-        <li><code>user</code> (<strong>required</strong>): the GitHub user name</li>
-        <li><code>repo</code> (<strong>required</strong>): the GitHub repository name</li>
-        <li><code>type</code> (<em>optional, defaults to “<code>default</code>“</em>): the release type to match
-            <ul>
-                <li><code>type=default</code>: will match last version number like <code>(v)X.Y.Z-STATE</code></li>
-                <li><code>type=strict</code>: will match last version number like <code>(v)X.Y.Z</code></li>
-                <li><code>type=STRING</code>: will match last version number like <code>(v)X.Y.Z-STRING</code></li>
-            </ul>
-        </li>
-        <li><code>color</code> (<em>optional, defaults to “<code>blue</code>“</em>): the button color
-            <ul>
-                <li><code>color=blue</code>: blue button <span class="showcase-color blue"></span></li>
-                <li><code>color=green</code>: green button <span class="showcase-color green"></span></li>
-                <li><code>color=red</code>: red button <span class="showcase-color red"></span></li>
-                <li><code>color=XXXXXX</code>: custom colored button</li>
-            </ul>
-        </li>
-        <li><code>url</code> (<em>optional, defaults to “<code>tarball</code>“</em>): the button link URL
-            <ul>
-                <li><code>url=tarball</code>: direct link to download a <em>tar.gz</em> archive of the release</li>
-                <li><code>url=zipball</code>: direct link to download a <em>zip</em> archive of the release</li>
-                <li><code>url=html</code>: link to the release’s page on GitHub</li>
-                <li><code>url=repo</code>: link to the repository’s homepage on GitHub</li>
-            </ul>
-        </li>
-    </ul>
+        <ul><li><code>type=default</code>: will match last version number like <code>(v)X.Y.Z-STATE</code></li><li><code>type=strict</code>: will match last version number like <code>(v)X.Y.Z</code></li><li><code>type=STRING</code>: will match last version number like <code>(v)X.Y.Z-STRING</code></li></ul></li><li><code>color</code> (<em>optional, defaults to "<code>blue</code>"</em>): the button color
 
-    <hr />
+        <ul><li><code>color=blue</code>: blue button <span class="showcase-color blue"></span></li><li><code>color=green</code>: green button <span class="showcase-color green"></span></li><li><code>color=red</code>: red button <span class="showcase-color red"></span></li><li><code>color=XXXXXX</code>: custom colored button</li></ul></li><li><code>link</code> (<em>optional, defaults to "<code>tarball</code>"</em>): the button link URL
 
-    <h2 id="open-source">Open source</h2>
-
+        <ul><li><code>link=tarball</code>: direct link to download a <em>tar.gz</em> archive of the release</li><li><code>link=zipball</code>: direct link to download a <em>zip</em> archive of the release</li><li><code>link=html</code>: link to the release's page on GitHub</li><li><code>link=repo</code>: link to the repository's homepage on GitHub</li></ul></li><li><code>title</code> (<em>optional, defaults to <code>last release</code></em>): the title of the button</li></ul><hr /><h2 id="open-source">Open source</h2>
     <p>The unofficial GitHub Release Button is open source, available on GitHub for
         downloading, forking and contributing.</p>
 
@@ -119,11 +77,12 @@
     </div>
 </footer>
 <script>
-    function loadFrame(url) {
-        document.getElementById('github-release-frame').setAttribute('src', '/?' + url);
-        document.getElementById('github-release-frame-img').setAttribute('src', '/?' + url);
-        return false;
-    }
+function loadFrame(url) {
+    var base = window.location.protocol + '//' + window.location.host + '/';
+    document.getElementById('github-release-frame').setAttribute('src', '/github-release-btn?' + url);
+    document.getElementById('github-release-img').setAttribute('src', '/github-release-btn?' + url);
+    return false;
+}
 </script>
 </body>
 </html>

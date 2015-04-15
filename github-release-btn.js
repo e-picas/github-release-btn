@@ -1,13 +1,24 @@
-
+/*
+ * This file is part of the GitHub-Release-Button app
+ *
+ * (c) Pierre Cassat <me@e-piwi.fr> and contributors
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 'use strict';
 
 var request = require('request');
 
+//var HARD_DEBUG = true;
+
 // debug with a title
 function log(title, obj) {
-    console.log(title);
-    console.dir(obj);
+    if (HARD_DEBUG!==undefined && HARD_DEBUG) {
+        console.log(title);
+        console.dir(obj);
+    }
 }
 
 // Read a page's GET URL variables and return them as an associative array.
@@ -53,7 +64,15 @@ function merge(/* obj1, obj2, ... */) {
     return result;
 }
 
+// guess the width of a text
+function guessTextWidth(str) {
+    return Math.round((str.length * 5.5), 2);
+}
+
 // the app itslef
+if (HARD_DEBUG===undefined) {
+    var HARD_DEBUG = false;
+}
 module.exports = {
 
     data:       {},
@@ -63,9 +82,10 @@ module.exports = {
     repo_link:  null,
     api_link:   null,
     _defaults:  {
+        title:  'last release',
         type:   'default',
         color:  'blue',
-        url:    'tarball'
+        link:   'tarball'
     },
     colors:     {
         blue:  '4183c4',
@@ -73,6 +93,8 @@ module.exports = {
         red:   'd9534f'
     },
     requests:   0,
+    padding:    6,
+    separator:  4,
 
     parse: function(request, response, cbName) {
         this.request = request;
@@ -141,7 +163,7 @@ module.exports = {
             var tag_name    = tag.tag_name || tag.name,
                 tag_color   = (this.colors[this.opts.color] !== undefined ? this.colors[this.opts.color] : this.opts.color),
                 tag_link;
-            switch (this.opts.url) {
+            switch (this.opts.link) {
                 case 'repo':
                     tag_link = this.repo_link;
                     break;
@@ -154,69 +176,30 @@ module.exports = {
                 default:
                     tag_link = tag.tarball_url;
             }
-            this.data = {
+            // sizes
+            var sizes = {};
+            // left part
+            sizes.left_width = (2*this.padding) + guessTextWidth(this.opts.title) + (this.separator/2);
+            sizes.left_padding = this.padding;
+            // right part
+            sizes.right_width = (2*this.padding) + guessTextWidth(tag_name);
+            sizes.right_padding = sizes.left_width + this.separator;
+            // separator
+            sizes.separator_x = sizes.left_width;
+            // full
+            sizes.full_width = sizes.left_width + sizes.right_width;
+            // full data
+            this.data = merge(sizes, {
+                title: this.opts.title,
                 name: tag_name,
                 link: tag_link,
                 color: tag_color
-            };
-console.dir(this.data);
+            });
+            log('data are', this.data);
             this.cbName(this.response, this.data);
         } else {
             this.load('tags');
         }
-    },
-
-    // width
-    resize: function(elt) {
-        var bbox        = elt.getElementById('name').getBBox(),
-            width       = bbox.width + 10,
-            fullwidth   = width + 77,
-            width_elts  = elt.getElementsByClassName('set-width'),
-            fullwidth_elts = elt.getElementsByClassName('set-fullwidth');
-        elts.button.setAttribute('width', fullwidth+'px');
-        for (i=0; i < width_elts.length; i++) {
-            width_elts.item(i).setAttribute('width', width+'px');
-        }
-        for (i=0; i < fullwidth_elts.length; i++) {
-            fullwidth_elts.item(i).setAttribute('width', fullwidth+'px');
-        }
     }
 
-/*
-    // populate svg
-    populate: function(name, url, color) {
-        var elts = {
-            button:     document.getElementById('button'),
-            name_box:   document.getElementById('name'),
-            color:      document.getElementsByClassName('set-color'),
-            name:       document.getElementsByClassName('set-name'),
-            width:      document.getElementsByClassName('set-width'),
-            fullwidth:  document.getElementsByClassName('set-fullwidth'),
-            url:        document.getElementsByClassName('set-url')
-        };
-        // color
-        for (i=0; i < elts.color.length; i++) {
-            elts.color.item(i).setAttribute('fill', '#'+color);
-        }
-        // name
-        for (i=0; i < elts.name.length; i++) {
-            elts.name.item(i).innerHTML = name;
-        }
-        // url
-        for (i=0; i < elts.url.length; i++) {
-            elts.url.item(i).setAttribute('xlink:href', url);
-        }
-        // width
-        var bbox        = elts.name_box.getBBox(),
-            width       = bbox.width + 10,
-            fullwidth   = width + 77;
-        elts.button.setAttribute('width', fullwidth+'px');
-        for (i=0; i < elts.width.length; i++) {
-            elts.width.item(i).setAttribute('width', width+'px');
-        }
-        for (i=0; i < elts.fullwidth.length; i++) {
-            elts.fullwidth.item(i).setAttribute('width', fullwidth+'px');
-        }
-    }
-*/
 };
