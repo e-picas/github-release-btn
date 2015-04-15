@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/piwi/markdown-extended.git",
-                "reference": "ca2ff42e2c991181c224426d4ea7f31db3cc449c"
+                "reference": "7127d880359ba63da99f588d0ab5d71fef9dcf29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/piwi/markdown-extended/zipball/ca2ff42e2c991181c224426d4ea7f31db3cc449c",
-                "reference": "ca2ff42e2c991181c224426d4ea7f31db3cc449c",
+                "url": "https://api.github.com/repos/piwi/markdown-extended/zipball/7127d880359ba63da99f588d0ab5d71fef9dcf29",
+                "reference": "7127d880359ba63da99f588d0ab5d71fef9dcf29",
                 "shasum": ""
             },
             "require": {
@@ -82,7 +82,7 @@
                 "markdown extended",
                 "mde"
             ],
-            "time": "2015-04-11 07:55:43"
+            "time": "2015-04-14 20:53:34"
         }
     ],
     "packages-dev": [
