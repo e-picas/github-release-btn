@@ -102,7 +102,7 @@ function githubApiRequest($url)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
     curl_setopt($ch, CURLOPT_USERAGENT, 'GitHubReleaseButtonApp');
-    curl_setopt($ch, CURLOPT_USERPWD, _settings('github_oauth').':x-oauth-basic');
+//    curl_setopt($ch, CURLOPT_USERPWD, _settings('github_oauth').':x-oauth-basic');
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     $content = curl_exec($ch);
     curl_close($ch);
@@ -353,7 +353,7 @@ _settings(array(
     'github_api_url'=> function ($user, $repo, $path=null) {
         return 'https://api.github.com/repos/'.$user.'/'.$repo.(!empty($path) ? '/'.$path : '');
     },
-    'github_oauth'  => 'ec8e5cae540203319afb79fc418a6f96213b0d69',
+//    'github_oauth'  => '',
 ));
 
 // URL request
