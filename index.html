@@ -23,7 +23,7 @@
     </div>
 
     <iframe id="github-release-frame" src="github-release-btn?user=piwi&repo=github-release-btn"
-        frameborder="0" scrolling="0" width="100%" height="20px"></iframe><hr /><h2 id="tests">Tests</h2>
+        frameborder="0" scrolling="0" width="100%" height="20px"></iframe><hr /><h2 id="contents">Contents</h2><ul><li><a href="#tests" title="Reach inpage section #tests">Tests</a></li><li><a href="#usage" title="Reach inpage section #usage">Usage</a></li><li><a href="#available-options" title="Reach inpage section #available-options">Available options</a></li><li><a href="#known-issues" title="Reach inpage section #known-issues">Known issues</a></li><li><a href="#open-source" title="Reach inpage section #open-source">Open source</a></li></ul><hr /><h2 id="tests">Tests</h2>
 <p>Most of the tests below work on the <a href="https://github.com/piwi/github-release-btn" title="See online https://github.com/piwi/github-release-btn">original <em>github-release-btn</em> repository</a>:</p>
 <ul><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn')">default test</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red')">test with red color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=ccc')">test with custom color</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=red&title=my+custom+title')">test with red color with a custom title</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=zipball')">test with zipball link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=html')">test with HTML link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=repo')">test with repository link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=none')">test with no link</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.*')">test with 'type=with.a.very.long.*'</a></li><li><a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a></li></ul><hr /><h2 id="usage">Usage</h2>
 <p>The base URL of the button is <code>https://ghrb.herokuapp.com/github-release-btn</code>.</p>
@@ -54,7 +54,11 @@ your rendering:</p>
 
 <ul><li><code>color=blue</code>: blue button <span class="showcase-color blue"></span></li><li><code>color=green</code>: green button <span class="showcase-color green"></span></li><li><code>color=red</code>: red button <span class="showcase-color red"></span></li><li><code>color=XXXXXX</code>: custom colored button</li></ul></li><li><code>link</code> (<em>optional, defaults to "<code>tarball</code>"</em>): the button link URL
 
-<ul><li><code>link=tarball</code>: direct link to download a <em>tar.gz</em> archive of the release</li><li><code>link=zipball</code>: direct link to download a <em>zip</em> archive of the release</li><li><code>link=html</code>: link to the release's page on GitHub</li><li><code>link=repo</code>: link to the repository's homepage on GitHub</li><li><code>link=none</code>: no link around the button</li></ul></li><li><code>title</code> (<em>optional, defaults to <code>last release</code></em>): the title of the button (its left part)</li></ul><hr /><h2 id="open-source">Open source</h2>
+<ul><li><code>link=tarball</code>: direct link to download a <em>tar.gz</em> archive of the release</li><li><code>link=zipball</code>: direct link to download a <em>zip</em> archive of the release</li><li><code>link=html</code>: link to the release's page on GitHub</li><li><code>link=repo</code>: link to the repository's homepage on GitHub</li><li><code>link=none</code>: no link around the button</li></ul></li><li><code>title</code> (<em>optional, defaults to <code>last release</code></em>): the title of the button (its left part)</li></ul><hr /><h2 id="known-issues">Known issues</h2>
+<p>If you use the button on a page with a large public, you may want to use <a href="https://developer.github.com/v3/oauth/" title="See online https://developer.github.com/v3/oauth/">GitHub OAuth</a>
+to skip <a href="https://developer.github.com/v3/rate_limit/" title="See online https://developer.github.com/v3/rate_limit/">requests rate limit</a>. You can
+do so by passing a <code>api_token=...</code> URL parameter, which will be used in all API's requests.</p>
+<hr /><h2 id="open-source">Open source</h2>
 <p>The unofficial GitHub Release Button is open source, available on <a href="http://github.com/" title="See online http://github.com/">GitHub</a> 
 for downloading, forking and contributing. It is coded as a PHP app freely hosted 
 and deployed by <a href="http://heroku.com/" title="See online http://heroku.com/">Heroku</a>.</p>
@@ -71,7 +75,7 @@ and deployed by <a href="http://heroku.com/" title="See online http://heroku.com
             Sources are available on <a href="https://github.com/piwi/github-release-btn">GitHub</a> and licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2</a>.
         </p>
         <p class="text-muted small text-center">
-            Last updated at 2015-04-16T05:31:01+00:00
+            Last updated at {% META:last_update %}
         </p>
     </div>
 </footer>

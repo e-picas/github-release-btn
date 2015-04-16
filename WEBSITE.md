@@ -8,6 +8,17 @@ author:         Pierre Cassat
 
 ----
 
+Contents
+--------
+
+-   [Tests](#tests)
+-   [Usage](#usage)
+-   [Available options](#available-options)
+-   [Known issues](#known-issues)
+-   [Open source](#open-source)
+
+----
+
 Tests
 -----
 
@@ -80,6 +91,15 @@ your rendering:
     -   `link=repo`: link to the repository's homepage on GitHub
     -   `link=none`: no link around the button
 -   `title` (*optional, defaults to `last release`*): the title of the button (its left part)
+
+----
+
+Known issues
+------------
+
+If you use the button on a page with a large public, you may want to use [GitHub OAuth](https://developer.github.com/v3/oauth/)
+to skip [requests rate limit](https://developer.github.com/v3/rate_limit/). You can
+do so by passing a `api_token=...` URL parameter, which will be used in all API's requests.
 
 ----
 
