@@ -123,7 +123,7 @@ function matchTag($data)
     if (is_array($data)) {
         $mask = _settings('mask');
         foreach ($data as $i=>$item) {
-            $name = isset($item['tag_name']) ? $item['tag_name'] : isset($item['name']) ? $item['name'] : '';
+            $name = isset($item['tag_name']) ? $item['tag_name'] : (isset($item['name']) ? $item['name'] : '');
             if (0 !== preg_match('#^'.$mask.'$#i', $name)) {
                 return $item;
             }
