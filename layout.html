@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="{% CHARSET %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% TITLE %}</title>
     <meta name="author" content="{% META:author %}">
@@ -18,7 +18,7 @@
         <h1><small>Introducing the unofficial</small><br>GitHub Release Button</h1>
         <div class="lead">
             A dynamic and customizable "<em>last release</em>" button for any <a href="http://github.com/">GitHub</a> repository with version number and tarball link.
-            Releases must follow the <a href="http://semver.org/">Semantic Versioning specifications</a>.
+            Releases must be named following the <a href="http://semver.org/">Semantic Versioning specifications</a>.
         </div>
     </div>
 
@@ -32,6 +32,9 @@
             <em>GitHub Realease Button</em> is made by <a href="http://github.com/piwi">@piwi</a> with love.
             <br class="hidden-xs hidden-sm">
             Sources are available on <a href="https://github.com/piwi/github-release-btn">GitHub</a> and licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2</a>.
+        </p>
+        <p class="text-muted small text-center">
+            Last updated at {% META:last_update %}
         </p>
     </div>
 </footer>

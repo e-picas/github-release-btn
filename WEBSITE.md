@@ -21,6 +21,7 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=zipball')">test with zipball link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=html')">test with HTML link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=repo')">test with repository link</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=none')">test with no link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.*')">test with 'type=with.a.very.long.*'</a>
@@ -31,16 +32,15 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 Usage
 -----
 
-The base URL of the button is `https://ghrb.herokuapp.com/github-release-btn`
-(a PHP app freely hosted by [Heroku](http://heroku.com/)).
+The base URL of the button is `https://ghrb.herokuapp.com/github-release-btn`.
 
-You can use the button in an `iframe`, which will keep the link on the button to the tarball or original repository:
+You can use the button in an `iframe`, which will keep the link to the tarball or the original repository:
 
 ```html
 <iframe src="https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn" 
     frameborder="0" scrolling="0" 
     width="190px" height="20px">
-    </iframe>
+</iframe>
 ```
 
 You can also embed the button as a simple image, to let you choose to surround it in a custom link:
@@ -59,7 +59,7 @@ NOTE - The image notation allows to be used in [a markdown](http://daringfirebal
 Available options
 -----------------
 
-You can (or may) use the following options as URL parameters to customize
+You can (or must) use the following options as URL parameters to customize
 your rendering:
 
 -   `user` (**required**): the GitHub user name
@@ -78,14 +78,16 @@ your rendering:
     -   `link=zipball`: direct link to download a *zip* archive of the release
     -   `link=html`: link to the release's page on GitHub
     -   `link=repo`: link to the repository's homepage on GitHub
--   `title` (*optional, defaults to `last release`*): the title of the button
+    -   `link=none`: no link around the button
+-   `title` (*optional, defaults to `last release`*): the title of the button (its left part)
 
 ----
 
 Open source
 -----------
 
-The unofficial GitHub Release Button is open source, available on GitHub for
-downloading, forking and contributing.
+The unofficial GitHub Release Button is open source, available on [GitHub](http://github.com/) 
+for downloading, forking and contributing. It is coded as a PHP app freely hosted 
+and deployed by [Heroku](http://heroku.com/).
 
 <a href="https://github.com/piwi/github-release-btn" class="btn btn-lg btn-primary">View it on GitHub</a>

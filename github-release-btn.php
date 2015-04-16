@@ -17,7 +17,7 @@
 
 // set a default timezone to avoid PHP5 warnings
 $dtmz = @date_default_timezone_get();
-@date_default_timezone_set($dtmz?:'Europe/Paris');
+@date_default_timezone_set($dtmz?:'UTC');
 
 // -----------------
 // library
@@ -26,11 +26,18 @@ $dtmz = @date_default_timezone_get();
 /**
  * App settings setter/getter
  *
- * @param null $name
- * @param null $value
+ *      _settings( (string)var , val )              : set 'var' on 'val'
+ *      _settings( (string)var )                    : get 'var' current value
+ *      _settings( (string)var , null , params )    : call 'var' closure with params 'params'
+ *      _settings( (array)var )                     : set 'var' keys on 'var' values
+ *      _settings()                                 : get the full current settings array
+ *
+ * @param null|string $name
+ * @param null|mixed $value
+ * @param null|array $params
  * @return array|null
  */
-function _settings($name = null, $value = null)
+function _settings($name = null, $value = null, array $params = null)
 {
     static $settings = array();
     if (is_array($name)) {
@@ -38,63 +45,46 @@ function _settings($name = null, $value = null)
     } elseif (!empty($name) && !empty($value)) {
         $settings[$name] = $value;
     } elseif (!empty($name)) {
-        return isset($settings[$name]) ? $settings[$name] : null;
+        $val = isset($settings[$name]) ? $settings[$name] : null;
+        if (!empty($val) && is_callable($val) && !empty($params)) {
+            $val = call_user_func_array($val, $params);
+        }
+        return $val;
     }
     return $settings;
 }
 
 /**
+ * Get a well-formatted path
+ *
+ * @param string|array $parts
+ * @return string
+ */
+function getPath($parts)
+{
+    return implode(DIRECTORY_SEPARATOR, array_map(
+        function ($p) { return str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $p); },
+        is_array($parts) ? $parts : array($parts)
+    ));
+}
+
+/**
  * Parse current request sanitized parameters
  *
+ * @param array $allowed List of allowed parameters
  * @return array
  */
-function getParams()
+function getParams(array $allowed)
 {
     $params = array();
     if (isset($_GET) && !empty($_GET)) {
         foreach ($_GET as $var=>$val) {
-            $params[$var] = filter_input(INPUT_GET, $var, FILTER_SANITIZE_STRING);
+            if (in_array($var, $allowed)) {
+                $params[$var] = filter_input(INPUT_GET, $var, FILTER_SANITIZE_STRING);
+            }
         }
     }
     return $params;
-}
-
-/**
- * Builds the mask to match release tag name
- *
- * @return string
- */
-function guessMask()
-{
-    $semver_strict = 'v?\\d+\.\\d+\.\\d+';
-    $semver_default = $semver_strict . '(-[0-9A-Za-z-\.]+)*';
-    $type = _settings('type');
-    switch ($type) {
-        case 'default':
-            return $semver_default;
-            break;
-        case 'strict':
-            return $semver_strict;
-            break;
-        default:
-            return $semver_strict . '-' . $type;
-    }
-}
-
-/**
- * Treats the `color` argument
- *
- * @return array|null
- */
-function guessColor()
-{
-    $colors = array(
-        'blue'  => '4183c4',
-        'green' => '4c1',
-        'red'   => 'd9534f',
-    );
-    $col = _settings('color');
-    return isset($colors[$col]) ? $colors[$col] : $col;
 }
 
 /**
@@ -103,14 +93,16 @@ function guessColor()
  * @param string $url   The type of request in 'tags', 'releases'
  * @return mixed
  */
-function githubApiReq($url) 
+function githubApiRequest($url)
 {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, 'https://api.github.com/repos/'._settings('user').'/'._settings('repo').'/'.$url);
+    curl_setopt($ch, CURLOPT_URL, _settings('github_api_url', null, array(
+        _settings('user'), _settings('repo'), $url
+    )));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
     curl_setopt($ch, CURLOPT_USERAGENT, 'GitHubReleaseButtonApp');
-    curl_setopt($ch, CURLOPT_USERPWD, 'ec8e5cae540203319afb79fc418a6f96213b0d69:x-oauth-basic');
+    curl_setopt($ch, CURLOPT_USERPWD, _settings('github_oauth').':x-oauth-basic');
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     $content = curl_exec($ch);
     curl_close($ch);
@@ -142,14 +134,17 @@ function matchTag($data)
  */
 function parseTag()
 {
-    $tag = _settings('tag');
-    $data = array();
-    $data['name']   = isset($tag['tag_name']) ? $tag['tag_name'] : $tag['name'];
-    $data['title']  = _settings('title');
-    $data['color']  = _settings('color');
-    $data['base_link']  = 'https://github.com/' . _settings('user').'/'._settings('repo');
-    $link = _settings('link');
+    $tag                = _settings('tag');
+    $data               = array();
+    $data['name']       = isset($tag['tag_name']) ? $tag['tag_name'] : $tag['name'];
+    $data['title']      = _settings('title');
+    $data['color']      = _settings('color');
+    $data['base_link']  = _settings('github_url', null, array(_settings('user'), _settings('repo')));
+    $link               = _settings('link');
     switch ($link) {
+        case 'none':
+            $data['tag_link'] = null;
+            break;
         case 'repo':
             $data['tag_link'] = $data['base_link'];
             break;
@@ -166,15 +161,72 @@ function parseTag()
 }
 
 /**
+ * Builds the mask to match release tag name
+ *
+ * @return string
+ */
+function guessMask()
+{
+    $type = _settings('type');
+    switch ($type) {
+        case 'default':
+            return _settings('semver_default');
+            break;
+        case 'strict':
+            return _settings('semver_strict');
+            break;
+        default:
+            return _settings('semver_strict') . '-' . $type;
+    }
+}
+
+/**
+ * Treats the `color` argument
+ *
+ * @return array|null
+ */
+function guessColor()
+{
+    $colors = _settings('colors');
+    $col    = _settings('color');
+    return isset($colors[$col]) ? $colors[$col] : $col;
+}
+
+/**
  * Calculates a text box width with DejaVu font in 11 points' size
  *
  * @param string $str
  * @return number
+ * @link http://php.net/manual/fr/function.imagettfbbox.php#108536
  */
 function guessTextWidth($str)
 {
-    $box = imageTTFBbox(11,0,__DIR__.DIRECTORY_SEPARATOR.'fonts'.DIRECTORY_SEPARATOR.'DejaVuSans.ttf',$str);
-    return abs($box[4] - $box[0]) * (72/96);
+    $box = imageTTFBbox(11, 0, getPath(array(__DIR__, 'fonts', 'DejaVuSans.ttf')), $str);
+    return abs($box[4] - $box[0]) * (72 / 96);
+}
+
+/**
+ * Calculate sizes for the SVG button
+ *
+ * @param array $data
+ * @return array
+ */
+function guessSizes(array $data)
+{
+    $padding    = _settings('padding');
+    $separator  = _settings('separator');
+    $sizes      = array();
+    // left part
+    $sizes['left-width']    = (2 * $padding) + guessTextWidth($data['title']) + ($separator / 2);
+    $sizes['left-padding']  = $padding;
+    // right part
+    $sizes['right-width']   = (2 * $padding) + guessTextWidth($data['name']);
+    $sizes['right-padding'] = $sizes['left-width'] + $separator;
+    // separator
+    $sizes['separator-x']   = $sizes['left-width'];
+    // full
+    $sizes['full-width']    = $sizes['left-width'] + $sizes['right-width'];
+    return $sizes;
 }
 
 /**
@@ -182,22 +234,12 @@ function guessTextWidth($str)
  */
 function render()
 {
-    $data       = _settings('tag_data');
-    $padding    = 6;
-    $separator  = 4;
-    $sizes      = array();
-    // left part
-    $sizes['left-width'] = (2*$padding) + guessTextWidth($data['title']) + ($separator/2);
-    $sizes['left-padding'] = $padding;
-    // right part
-    $sizes['right-width'] = (2*$padding) + guessTextWidth($data['name']);
-    $sizes['right-padding'] = $sizes['left-width'] + $separator;
-    // separator
-    $sizes['separator-x'] = $sizes['left-width'];
-    // full
-    $sizes['full-width'] = $sizes['left-width'] + $sizes['right-width'];
+    $data   = _settings('tag_data');
+    $sizes  = guessSizes($data);
+    // link ?
+    $link_opentag   = !empty($data['tag_link']) ? '<a xlink:href="'.$data['tag_link'].'" class="svg">' : '';
+    $link_closetag  = !empty($data['tag_link']) ? '</a>' : '';
     // content
-    dbg('Sizes are:', $sizes);
     $svg = <<<MSG
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
@@ -224,7 +266,7 @@ a.svg:after {
 }
 /* ]]> */
 </style>
-    <a xlink:href="{$data['tag_link']}" class="svg">
+    {$link_opentag}
         <linearGradient id="a" x2="0" y2="100%">
             <stop offset="0" stop-color="#bbb" stop-opacity=".1" />
             <stop offset="1" stop-opacity=".1" />
@@ -239,11 +281,11 @@ a.svg:after {
             <text x="{$sizes['right-padding']}" y="15" fill="#010101" fill-opacity=".3">{$data['name']}</text>
             <text x="{$sizes['right-padding']}" y="14">{$data['name']}</text>
         </g>
-    </a>
+    {$link_closetag}
 </svg>
 MSG;
     if (!headers_sent() && (!defined('HARD_DEBUG') || HARD_DEBUG!==true)) {
-        header('Content-Type: image/svg+xml');
+        header('Content-Type: '._settings('svg-mime'));
     }
     echo $svg;
     exit(0);
@@ -254,13 +296,7 @@ MSG;
  */
 function renderEmpty()
 {
-    _settings('tag_data', array(
-        'name'      => '                ',
-        'title'     => _settings('title'),
-        'color'     => '404040',
-        'base_link' => '#',
-        'tag_link'  => '#',
-    ));
+    _settings('tag_data', _settings('empty_tag'));
     render();
 }
 
@@ -290,14 +326,40 @@ if (defined('HARD_DEBUG') && HARD_DEBUG===true) {
 
 // defaults
 _settings(array(
-    'title' => 'last release',
-    'type'  => 'default',
-    'color' => 'blue',
-    'link'  => 'tarball',
+    'title'         => 'last release',
+    'type'          => 'default',
+    'color'         => 'blue',
+    'link'          => 'tarball',
+    'empty_tag'     => array(
+        'name'          => '                ',
+        'title'         => 'last release',
+        'color'         => '404040',
+        'base_link'     => '#',
+        'tag_link'      => '#',
+    ),
+    'semver_strict' => 'v?\\d+\.\\d+\.\\d+',
+    'semver_default' => 'v?\\d+\.\\d+\.\\d+(-[0-9A-Za-z-\.]+)*',
+    'colors'        => array(
+        'blue'          => '4183c4',
+        'green'         => '4c1',
+        'red'           => 'd9534f',
+    ),
+    'padding'       => 6,
+    'separator'     => 4,
+    'svg-mime'      => 'image/svg+xml',
+    'github_url'    => function ($user, $repo, $path=null) {
+        return 'https://github.com/'.$user.'/'.$repo.(!empty($path) ? '/'.$path : '');
+    },
+    'github_api_url'=> function ($user, $repo, $path=null) {
+        return 'https://api.github.com/repos/'.$user.'/'.$repo.(!empty($path) ? '/'.$path : '');
+    },
+    'github_oauth'  => 'ec8e5cae540203319afb79fc418a6f96213b0d69',
 ));
 
 // URL request
-_settings(getParams());
+_settings(getParams(array(
+    'user', 'repo', 'title', 'type', 'color', 'link'
+)));
 
 // mask to match
 _settings('mask', guessMask());
@@ -308,13 +370,11 @@ _settings('color', guessColor());
 // debug full settings
 dbg('Settings are:', _settings());
 
-//
-
 // ok to go?
 if (_settings('user') && _settings('repo')) {
-    $json = githubApiReq('releases');
+    $json = githubApiRequest('releases');
     if (empty($json)) {
-        $json = githubApiReq('tags');
+        $json = githubApiRequest('tags');
     }
     dbg('JSON response is:', $json);
     if (!empty($json)) {

@@ -12,11 +12,21 @@
     "ext-gd": "*"
   },
   "require-dev": {
+    "fabpot/php-cs-fixer": "@stable",
     "heroku/heroku-buildpack-php": "*"
   },
   "scripts": {
+    "install-local": [
+      "composer install --ignore-platform-reqs"
+    ],
+    "update-local": [
+      "composer update --ignore-platform-reqs"
+    ],
+    "cs-fixer": [
+      "php ./vendor/bin/php-cs-fixer fix github-release-btn.php --level=psr2 --verbose"
+    ],
     "website": [
-      "./vendor/bin/markdown-extended --force --template=layout.html --output=index.html WEBSITE.md"
+      "php ./vendor/bin/markdown-extended --force --template=layout.html --output=index.html WEBSITE.md"
     ]
   }
 }
