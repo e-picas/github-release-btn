@@ -34,6 +34,7 @@ Most of the tests below work on the [original *github-release-btn* repository](h
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=repo')">test with repository link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&link=none')">test with no link</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=strict')">test with 'strict' mode</a>
+-   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=metadata')">test with 'metadata' mode</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=no.v.prefix')">test with 'type=no.v.prefix'</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&type=with.a.very.long.*')">test with 'type=with.a.very.long.*'</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=dotfiles')">test on a repository with no realease or tag</a>
@@ -63,7 +64,10 @@ You can also embed the button as a simple image, to let you choose to surround i
 
 NOTE - The image notation allows to be used in [a markdown](http://daringfireball.net/projects/markdown/syntax) content easily:
 
+    # simple image
     ![alt](https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn)
+    # image linked to the releases' page
+    [![alt](https://ghrb.herokuapp.com/github-release-btn?user=piwi&repo=github-release-btn)](https://github.com/piwi/github-release-btn/releases)
 
 ----
 
@@ -76,8 +80,9 @@ your rendering:
 -   `user` (**required**): the GitHub user name
 -   `repo` (**required**): the GitHub repository name
 -   `type` (*optional, defaults to "`default`"*): the release type to match
-    -   `type=default`: will match last version number like `(v)X.Y.Z-STATE`
+    -   `type=default`: will match last version number like `(v)X.Y.Z(-STATE)`
     -   `type=strict`: will match last version number like `(v)X.Y.Z`
+    -   `type=metadata`: will match last version number like `(v)X.Y.Z-STATE` ("state" required)
     -   `type=STRING`: will match last version number like `(v)X.Y.Z-STRING`
 -   `color` (*optional, defaults to "`blue`"*): the button color
     -   `color=blue`: blue button <span class="showcase-color blue"></span>
