@@ -178,6 +178,9 @@ function guessMask()
         case 'strict':
             return _settings('semver_strict');
             break;
+        case 'metadata':
+            return _settings('semver_metadata');
+            break;
         default:
             return _settings('semver_strict') . '-' . $type;
     }
@@ -342,6 +345,7 @@ _settings(array(
     ),
     'semver_strict' => 'v?\\d+\.\\d+\.\\d+',
     'semver_default' => 'v?\\d+\.\\d+\.\\d+(-[0-9A-Za-z-\.]+)*',
+    'semver_metadata' => 'v?\\d+\.\\d+\.\\d+(-[0-9A-Za-z-\.]+)+',
     'colors'        => array(
         'blue'          => '4183c4',
         'green'         => '4c1',
@@ -356,7 +360,6 @@ _settings(array(
     'github_api_url'=> function ($user, $repo, $path=null) {
         return 'https://api.github.com/repos/'.$user.'/'.$repo.(!empty($path) ? '/'.$path : '');
     },
-//    'github_oauth'  => '',
 ));
 
 // URL request
