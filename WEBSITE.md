@@ -3,8 +3,8 @@ description:    A dynamic last release button for any GitHub repository with ver
 author:         Pierre Cassat
 
 
-<iframe id="github-release-frame" src="github-release-btn?user=piwi&repo=github-release-btn"
-        frameborder="0" scrolling="0" width="100%" height="20px"></iframe>
+<iframe src="github-release-btn?user=piwi&repo=github-release-btn"
+        frameborder="0" scrolling="0" width="190px" height="20px"></iframe>
 
 ----
 
@@ -22,7 +22,12 @@ Contents
 Tests
 -----
 
-Most of the tests below work on the [original *github-release-btn* repository](https://github.com/piwi/github-release-btn):
+Most of these tests are made to the [original *github-release-btn* repository](https://github.com/piwi/github-release-btn).
+
+<iframe id="github-release-frame" src="github-release-btn?user=piwi&repo=github-release-btn"
+        frameborder="0" scrolling="0" width="100%" height="20px"></iframe>
+
+Click on the links below to update the above button dynamically:
 
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn')">default test</a>
 -   <a href="javascript:void(0);" onclick="loadFrame('user=piwi&repo=github-release-btn&color=green')">test with green color</a>
@@ -102,7 +107,15 @@ your rendering:
 Known issues
 ------------
 
-If you use the button on a page with a large public, you may want to use [GitHub OAuth](https://developer.github.com/v3/oauth/)
+The button has a dynamic width depending on the text inside each part of it.
+As you can't really guess this width, you must find a way to let the browser adapt the size
+of the *image* or *iframe* to its content. This can be done quite easily for an image, with
+a smart `style` attribute like `<img style="max-width:100%;" ...` but is more difficult for
+an iframe. In this case, you may adjust its width dynamically using javascript or set up a 
+full page width frame. I use a fixed width of 190 pixels in the examples of this page as it
+seems to fit most cases.
+
+In some cases, you may want to use [GitHub OAuth](https://developer.github.com/v3/oauth/)
 to skip [requests rate limit](https://developer.github.com/v3/rate_limit/). You can
 do so by passing a `api_token=...` URL parameter, which will be used in all API's requests.
 
