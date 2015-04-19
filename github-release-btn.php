@@ -306,6 +306,20 @@ function renderEmpty()
     render();
 }
 
+// load environment
+function loadUserEnv()
+{
+    $env = getPath(array(__DIR__, '.env'));
+    if (file_exists($env)) {
+        $vars = parse_ini_file($env, true);
+        if (!empty($vars)) {
+            foreach ($vars as $var=>$val) {
+                putenv($var.'='.$val);
+            }
+        }
+    }
+}
+
 // debug
 function dbg()
 {
@@ -362,9 +376,12 @@ _settings(array(
     },
 ));
 
+// user environment
+loadUserEnv();
+
 // URL request
 _settings(getParams(array(
-    'user', 'repo', 'title', 'type', 'color', 'link', 'api_token'
+    'user', 'repo', 'title', 'type', 'color', 'link'
 )));
 
 // mask to match
@@ -375,6 +392,9 @@ _settings('color', guessColor());
 
 // debug full settings
 dbg('Settings are:', _settings());
+
+// API token
+_settings('api_token', getenv('GITHUB_TOKEN'));
 
 // ok to go?
 if (_settings('user') && _settings('repo')) {

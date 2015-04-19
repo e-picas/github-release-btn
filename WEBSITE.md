@@ -112,12 +112,9 @@ As you can't really guess this width, you must find a way to let the browser ada
 of the *image* or *iframe* to its content. This can be done quite easily for an image, with
 a smart `style` attribute like `<img style="max-width:100%;" ...` but is more difficult for
 an iframe. In this case, you may adjust its width dynamically using javascript or set up a 
-full page width frame. I use a fixed width of 190 pixels in the examples of this page as it
-seems to fit most cases.
+full page width frame. 
 
-In some cases, you may want to use [GitHub OAuth](https://developer.github.com/v3/oauth/)
-to skip [requests rate limit](https://developer.github.com/v3/rate_limit/). You can
-do so by passing a `api_token=...` URL parameter, which will be used in all API's requests.
+I use a fixed width of 190 pixels in the examples of this page as it seems to fit most cases.
 
 ----
 
